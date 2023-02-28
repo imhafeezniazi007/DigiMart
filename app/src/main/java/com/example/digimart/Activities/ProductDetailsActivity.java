@@ -42,7 +42,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         String image = getIntent().getStringExtra("image");
         int id = getIntent().getIntExtra("id",0);
         double price = getIntent().getDoubleExtra("price",0);
-
+        getProductDetails(id);
         Cart cart = TinyCartHelper.getCart();
 
 
