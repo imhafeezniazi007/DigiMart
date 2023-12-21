@@ -23,6 +23,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.digimart.Adapters.CartAdapter;
 import com.example.digimart.Models.Product;
+import com.example.digimart.Models.User;
 import com.example.digimart.Utils.Consts;
 import com.example.digimart.databinding.ActivityCheckoutBinding;
 import com.hishd.tinycart.model.Cart;
@@ -92,12 +93,8 @@ public class CheckoutActivity extends AppCompatActivity {
         activityCheckoutBinding.checkoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (TextUtils.isEmpty(activityCheckoutBinding.nameBox.getText()) &&
-                        TextUtils.isEmpty(activityCheckoutBinding.phoneBox.getText()) &&
-                        TextUtils.isEmpty(activityCheckoutBinding.addressBox.getText()) &&
+                if (TextUtils.isEmpty(activityCheckoutBinding.addressBox.getText()) &&
                         TextUtils.isEmpty(activityCheckoutBinding.dateBox.getText())) {
-                    activityCheckoutBinding.nameBox.setError("Required!");
-                    activityCheckoutBinding.phoneBox.setError("Required!");
                     activityCheckoutBinding.addressBox.setError("Required!");
                     activityCheckoutBinding.dateBox.setError("Required!");
                     //processOrder();
@@ -115,20 +112,21 @@ public class CheckoutActivity extends AppCompatActivity {
         progressDialog.show();
         RequestQueue queue = Volley.newRequestQueue(this);
 
+        User user = new User();
         JSONObject productOrder = new JSONObject();
         JSONObject dataObject = new JSONObject();
         try {
 
             productOrder.put("address", activityCheckoutBinding.addressBox.getText().toString());
-            productOrder.put("buyer", activityCheckoutBinding.nameBox.getText().toString());
+            productOrder.put("buyer", user.getName());
             productOrder.put("comment", activityCheckoutBinding.commentBox.getText().toString());
             productOrder.put("created_at", Calendar.getInstance().getTimeInMillis());
             productOrder.put("last_update", Calendar.getInstance().getTimeInMillis());
             productOrder.put("date_ship", Calendar.getInstance().getTimeInMillis());
-            productOrder.put("phone", activityCheckoutBinding.phoneBox.getText().toString());
+            productOrder.put("phone", user.getNumber());
             productOrder.put("serial", "cab8c1a4e4421a3b");
             productOrder.put("shipping", "");
-            productOrder.put("shipping_location", "");
+            productOrder.put("shipping_location", "Longitude: "+user.getLongitude() +"Latitude: "+user.getLatitude());
             productOrder.put("shipping_rate", "0.0");
             productOrder.put("status", "WAITING");
             productOrder.put("tax", deliveryCharges);
@@ -164,14 +162,14 @@ public class CheckoutActivity extends AppCompatActivity {
                         String orderNumber = response.getJSONObject("data").getString("code");
                         new AlertDialog.Builder(CheckoutActivity.this)
                                 .setTitle("Order Successful")
-                                .setCancelable(false)
+                                .setCancelable(true)
                                 .setMessage("Your order number is: " + orderNumber)
-                                .setPositiveButton("Pay Now", new DialogInterface.OnClickListener() {
+                                .setPositiveButton("Close", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        Intent intent = new Intent(CheckoutActivity.this, PaymentActivity.class);
-                                        intent.putExtra("orderCode", orderNumber);
-                                        startActivity(intent);
+                                        clearAll();
+                                        startActivity(new Intent(CheckoutActivity.this, HomeActivity.class));
+                                        finishAffinity();
                                     }
                                 }).show();
                     } else {
@@ -197,14 +195,14 @@ public class CheckoutActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
             }
-        }) {
+        }) /*{
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Security", "secure_code");
                 return headers;
             }
-        };
+        }*/;
 
         queue.add(request);
     }
@@ -213,5 +211,13 @@ public class CheckoutActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         finish();
         return super.onSupportNavigateUp();
+    }
+
+    void clearAll()
+    {
+        activityCheckoutBinding.addressBox.setText("");
+        activityCheckoutBinding.dateBox.setText("");
+        activityCheckoutBinding.commentBox.setText("");
+
     }
 }

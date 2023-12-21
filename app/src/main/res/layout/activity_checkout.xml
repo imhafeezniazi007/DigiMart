@@ -167,19 +167,7 @@
                         android:layout_height="1dp"
                         android:background="@color/backgroundColor" />
 
-                    <EditText
-                        android:id="@+id/nameBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/edittext_bg"
-                        android:ems="10"
-                        android:hint="Full Name"
-                        android:inputType="textPersonName"
-                        android:padding="15dp"
-                        />
-
-                   <!-- <EditText
+                    <!-- <EditText
                         android:id="@+id/emailBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -189,17 +177,6 @@
                         android:hint="Email Address"
                         android:inputType="textPersonName"
                         android:padding="15dp" />-->
-
-                    <EditText
-                        android:id="@+id/phoneBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/edittext_bg"
-                        android:ems="10"
-                        android:hint="Phone Number"
-                        android:inputType="textPersonName"
-                        android:padding="15dp" />
 
                     <EditText
                         android:id="@+id/addressBox"

@@ -66,6 +66,7 @@
                 android:layout_marginTop="10dp"
                 app:cardCornerRadius="10dp">
 
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/categories_list"
                     android:layout_width="match_parent"

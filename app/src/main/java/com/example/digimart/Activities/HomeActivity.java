@@ -1,7 +1,11 @@
 package com.example.digimart.Activities;
 
+import static android.app.ProgressDialog.show;
+
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -9,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +31,7 @@ import com.example.digimart.Adapters.CategoryAdapter;
 import com.example.digimart.Adapters.ProductAdapter;
 import com.example.digimart.Models.Category;
 import com.example.digimart.Models.Product;
+import com.example.digimart.Models.User;
 import com.example.digimart.R;
 import com.example.digimart.Utils.Consts;
 import com.example.digimart.databinding.ActivityHomeBinding;
@@ -67,6 +73,8 @@ public class HomeActivity extends AppCompatActivity {
         activityHomeBinding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(activityHomeBinding.getRoot());
 
+
+
         //location code
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -86,10 +94,14 @@ public class HomeActivity extends AppCompatActivity {
                                 int index = locationResult.getLocations().size() - 1;
                                 double latitude = locationResult.getLocations().get(index).getLatitude();
                                 double longitude = locationResult.getLocations().get(index).getLongitude();
+                                User user = new User();
+                                user.setLongitude(longitude);
+                                user.setLatitude(latitude);
 
                             }
                         }
                     }, Looper.getMainLooper());
+
 
                 }
             } else {
@@ -97,7 +109,10 @@ public class HomeActivity extends AppCompatActivity {
 
                 turnOnGPS();
             }
+
         }
+
+
 
 
         //location code
@@ -148,7 +163,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 try {
                     LocationSettingsResponse response = task.getResult(ApiException.class);
-                    Toast.makeText(HomeActivity.this, "GPS is already tured on", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeActivity.this, "GPS is already turned on", Toast.LENGTH_SHORT).show();
 
                 } catch (ApiException e) {
 
@@ -243,7 +258,7 @@ public class HomeActivity extends AppCompatActivity {
     private void getProducts() {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        String url = Consts.GET_PRODUCTS_URL + "?count=20";
+        String url = Consts.GET_PRODUCTS_URL;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
